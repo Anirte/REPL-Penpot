@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: monospace; background:#1e1e2e; color:#cdd6f4; height:100vh; display:flex; flex-direction:column; }
+  #output { flex:1; overflow-y:auto; padding:10px; font-size:12px; }
+  .line { margin-bottom:4px; white-space:pre-wrap; word-break:break-all; }
+  .line.ok { color:#a6e3a1; }
+  .line.err { color:#f38ba8; }
+  .line.cmd { color:#89b4fa; }
+  #input-row { display:flex; border-top:1px solid #313244; padding:8px; gap:6px; }
+  textarea { flex:1; background:#313244; border:none; color:#cdd6f4; font-family:monospace; font-size:12px; padding:6px; border-radius:4px; resize:none; outline:none; height:60px; }
+  button { background:#89b4fa; border:none; color:#1e1e2e; font-weight:700; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:12px; align-self:flex-end; }
+</style>
+</head>
+<body>
+<div id="output"></div>
+<div id="input-row">
+  <textarea id="code" placeholder="penpot.currentPage.name"></textarea>
+  <button onclick="run()">Run</button>
+</div>
+<script>
+const out = document.getElementById('output');
+const code = document.getElementById('code');
+
+function log(text, cls) {
+  const d = document.createElement('div');
+  d.className = 'line ' + cls;
+  d.textContent = text;
+  out.appendChild(d);
+  out.scrollTop = out.scrollHeight;
+}
+
+function run() {
+  const c = code.value.trim();
+  if (!c) return;
+  log('> ' + c, 'cmd');
+  parent.postMessage({ type: 'EVAL', code: c }, '*');
+}
+
+// Run on Ctrl+Enter
+code.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); run(); }
+});
+
+window.addEventListener('message', e => {
+  if (e.data.type === 'RESULT') {
+    log(e.data.out, e.data.ok ? 'ok' : 'err');
+  }
+});
+</script>
+</body>
+</html>
