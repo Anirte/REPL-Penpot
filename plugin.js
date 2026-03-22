@@ -4,7 +4,8 @@ penpot.ui.open('Penpot REPL', '', { width: 500, height: 400 });
 penpot.ui.onMessage(msg => {
   if (msg.type === 'EVAL') {
     try {
-      const result = eval(msg.code);
+      const fn = new Function('penpot', msg.code);
+      const result = fn(penpot);
       const out = result === undefined ? 'undefined'
                 : typeof result === 'object' ? JSON.stringify(result, null, 2)
                 : String(result);
