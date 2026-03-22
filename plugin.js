@@ -1,3 +1,4 @@
+console.log('REPL plugin loaded');
 penpot.ui.open('Penpot REPL', '', { width: 500, height: 400 });
 
 penpot.ui.onMessage(msg => {
