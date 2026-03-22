@@ -5,5 +5,5 @@
   "engine": "0.1",
   "ui": "repl.html",
   "code": "repl-plugin.js",
-  "permissions": ["content:read", "content:write", "allow:downloads"]
+  "permissions": ["content:read", "content:write"]
 }
